@@ -8,9 +8,12 @@
   width: 100vw;
   overflow:hidden;
   position:relative;
+	display:flex;
+	align-items: center;
+	justify-content: center;
 }
 #bubble{
-  position:absolute;
+  position:relative;
   height: 100vw;
   width: 100vw;
   background: #31ae53;
@@ -22,14 +25,28 @@ height: 100%;
 width: 100%;
   display:flex;
   align-items:center;
+	justify-content: center;
 }
 .panel{
   position:absolute;
-  border: 1px solid red;
   width: 100vw;
+	transform: translate3d(0, 0, 0);
+	will-change: transform;
+}
+
+.panel.start{
+	border: 2px solid red;
+}
+.panel.middle{
+	border: 2px solid yellow;
+}
+.panel.end{
+	border: 2px solid brown;
 }
 
 .panel h4{
   color: #fff;
   font-size: 60px;
 }
+
+
