@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colored Countries Map</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      overflow-x: hidden;
+    }
+    svg {
+      box-shadow: 0px 0px 6px 1px rgb(26, 11, 11);
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const width = 1580;
+    const height = 780;
+
+    // Create an SVG container
+    const svg = d3.select("body")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    // Define the equirectangular projection
+    const projection = d3.geoEquirectangular()
+      .scale(250) // Adjust for zoom
+      .translate([width / 2, height / 2]); // Center map
+
+    const path = d3.geoPath().projection(projection);
+
+    // List of countries to color
+    const headquarterCountry = ['Japan']
+    const availableBranchesCountries = ['Canada', 'Nepal', 'Indonesia', 'Philippines', 'Vietnam']
+    const branchesOpeningSoonCountries = ['United States of America', 'India']
+
+    // Load the TopoJSON data
+    d3.json("https://unpkg.com/world-atlas@2/countries-110m.json").then(world => {
+      const countries = topojson.feature(world, world.objects.countries);
+      // console.log(countries.features.filter(i => i.properties.name == 'Fiji'))
+
+      // Draw countries
+      svg.selectAll("path")
+        .data(countries.features)
+        .enter().append("path")
+        .attr("d", path)
+        .attr("fill", d => {
+          console.log(d.properties.name)
+          if (availableBranchesCountries.includes(d.properties.name))
+            return 'green'
+          else if (headquarterCountry.includes(d.properties.name))
+            return 'brown'
+          else if (branchesOpeningSoonCountries.includes(d.properties.name))
+            return 'blue'
+          else return 'white';
+
+        })
+        .attr("stroke", "#ff00ff2f")
+        .attr("stroke-width", 0.2);
+    });
+  </script>
+</body>
+</html>

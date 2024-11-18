@@ -7,28 +7,36 @@ const tl = gsap.timeline(
 		scrollTrigger: {
 			trigger: '#animation-container',
 			start: "top 0%",
-			end: "+=10000",
+			end: "+=30000",
 			scrub: 1,
 			markers: true,
 			pin: true,
+
 		}
 	}
 );
 tl.fromTo('#bubble', {
 	scale: 0
 }, {
-	scale: 2,
+	scale: 3,
 })
 
-panels.forEach(panel => {
+tl.fromTo('#worldMap', {
+	opacity: 0,
+	scale: 5,
+}
+,{
+	opacity: 0.05,
+	scale: 1 
+});
+
+panels.forEach((panel, index) => {
 	const tween = gsap.fromTo(panel, {
-		xPercent: 100,
+		opacity: 0,
+		x: '100vw'
 	}, {
-		xPercent: 0,
-		ease: "none",
-		onStart : function () {
-			gsap.to(panel, {yPercent: 0})
-		},
+		opacity: 1,
+		x: 0,
 		onUpdate: function () {
 			panelAnimationFunction(panel, parseFloat(this.progress().toFixed(2)))
 		},
@@ -41,15 +49,14 @@ function panelAnimationFunction(panel, progress) {
 	if (progress > 0) {
 		console.log(progress)
 		if (progress <= 0.15) {
-			gsap.to(panel, { opacity: progress})
+			gsap.to(panel, { opacity: progress })
 		} else if (progress >= 0.15 && progress <= 0.95) {
 			console.log('stage-2')
-			gsap.to(panel, { opacity: 1, yPercent: 0 })
+			gsap.to(panel, { opacity: 1 })
 		} else if (progress >= 0.95) {
 			gsap.to(panel, {
-				yPercent: -100,
 				duration: 2,
-				opacity: 0
+				opacity: 0.01,
 			})
 		}
 	}
